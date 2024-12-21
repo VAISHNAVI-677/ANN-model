@@ -21,7 +21,6 @@ first page
       background-image: url('tulasi.jpg');
       background-size: cover;
     }
-
     .container {
       max-width: 400px;
       width: 90%;

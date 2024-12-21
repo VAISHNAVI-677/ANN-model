@@ -1,1 +1,167 @@
+first page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indian Medicinal Plant Identification</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('tulasi.jpg');
+      background-size: cover;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 90%;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input[type="file"] {
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #28a745;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Identify Indian Medicinal Plants</h1>
+    <form id="plantForm">
+      <input type="file" id="plantImage" accept="image/*" required>
+      <button type="submit">Identify Plant</button>
+    </form>
+  </div>
+  <script>
+    const form = document.getElementById('plantForm');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById('plantImage');
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('plantImage', file);
+
+        // Redirect to results page with image file
+        const url = URL.createObjectURL(file);
+        sessionStorage.setItem('uploadedImage', url);
+        window.location.href = 'result.html';
+      } else {
+        alert('Please upload an image!');
+      }
+    });
+  </script>
+</body>
+</html>
+second page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identification Result</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .image-container img {
+      max-width: 300px;
+      max-height: 300px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .accuracy-container {
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="image-container">
+      <img id="uploadedImage" alt="Uploaded Plant" />
+    </div>
+    <div class="accuracy-container">
+      <h3>Prediction Accuracy:</h3>
+      <p id="accuracy">Loading...</p>
+    </div>
+  </div>
+  <script>
+    // Load the uploaded image
+    const image = sessionStorage.getItem('uploadedImage');
+    if (image) {
+      document.getElementById('uploadedImage').src = image;
+      // Simulate accuracy (replace this with actual data from your ML model)
+      setTimeout(() => {
+        document.getElementById('accuracy').textContent = '85%'; // Replace with dynamic data
+      }, 1000);
+    } else {
+      alert('No image uploaded!');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,1 +1,64 @@
+import os
+import numpy as np
+from PIL import Image
+
+
+# Function to load the dataset
+def load_image_dataset(dataset_directory, target_size=(600,450)):
+    images = []
+    labels = []
+    class_names = os.listdir(dataset_directory)  # Get all class folder names
+
+    for class_idx, class_name in enumerate(class_names):
+        class_folder = os.path.join(dataset_directory, class_name)
+        
+        if os.path.isdir(class_folder):  # Ensure it's a folder, not a file
+            for filename in os.listdir(class_folder):
+                if filename.endswith(('.png', '.jpg', '.jpeg')):
+                    image_path = os.path.join(class_folder, filename)
+
+                    # Load and process the image
+                    try:
+                        # Open the image file
+                        image = Image.open(image_path)
+                        # Resize the image to target_size
+                        image = image.resize(target_size)
+                        # Convert image to numpy array and normalize pixel values to [0, 1]
+                        image_array = np.array(image) / 255.0  # Normalizing
+                        images.append(image_array)
+                        labels.append(class_idx)  # Label is the class index
+                    except Exception as e:
+                        print(f"Error loading image {image_path}: {e}")
+    
+    # Convert the lists to numpy arrays
+    images = np.array(images)
+    labels = np.array(labels)
+    return images, labels, class_names
+
+# Path to the dataset (adjust accordingly)
+dataset_directory = r'C:\Users\vaishnavi\OneDrive\Desktop\PROJECT SCHOOL\Indian_Medicinal_Plants'
+
+# Load the dataset
+images, labels, class_names = load_image_dataset(dataset_directory)
+import matplotlib.pyplot as plt
+
+# Number of images to plot
+num_images = 40
+
+# Create a grid of subplots (for example, 2 rows and 5 columns)
+fig, axes = plt.subplots(8, 5, figsize=(40, 40))
+
+# Loop through the axes and images to display
+for i, ax in enumerate(axes.flat):
+    if i < num_images:
+        # Display the image
+        ax.imshow(images[i])
+        # Display the class name as title
+        ax.set_title(class_names[labels[i]])
+        # Hide axes
+        ax.axis('off')
+
+# Adjust layout and display
+plt.tight_layout()
+plt.show()
 
